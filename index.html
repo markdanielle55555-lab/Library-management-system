@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<!-- Student Login -->
+<div id="loginPage" class="login-page">
+    <div class="login-box">
+        <div class="login-icon">📚</div>
+
+        <h1>Library System</h1>
+        <p>Student Login</p>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+                <label for="studentName">Full Name:</label>
+                <input
+                    type="text"
+                    id="studentName"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="studentEmail">Email:</label>
+                <input
+                    type="email"
+                    id="studentEmail"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="studentId">Student ID:</label>
+                <input
+                    type="text"
+                    id="studentId"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="course">Course:</label>
+                <input
+                    type="text"
+                    id="course"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="yearLevel">Year Level:</label>
+                <select id="yearLevel" required>
+                    <option value="">Select year level</option>
+                    <option value="1st Year">1st Year</option>
+                    <option value="2nd Year">2nd Year</option>
+                    <option value="3rd Year">3rd Year</option>
+                    <option value="4th Year">4th Year</option>
+                    <option value="5th Year">5th Year</option>
+                </select>
+            </div>
+
+            <button type="submit" class="login-btn">
+                Login
+            </button>
+
+        </form>
+    </div>
+</div>
+
+
+<!-- Gmail Verification Form -->
+<form id="verificationForm" hidden>
+    <h2>Verify Your Gmail</h2>
+
+    <p id="verificationMessage">
+        Enter the code sent to your Gmail account.
+    </p>
+
+    <div class="form-group">
+        <label for="verificationCode">Verification Code:</label>
+        <input
+            type="text"
+            id="verificationCode"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            pattern="[0-9]{6}"
+            maxlength="6"
+            placeholder="Enter 6-digit code"
+            required
+        >
+    </div>
+
+    <p id="otpStatus" role="status"></p>
+
+    <button type="submit" class="login-btn">
+        Verify and Continue
+    </button>
+
+    <button type="button" id="resendCodeBtn">
+        Resend Code
+    </button>
+
+    <button type="button" id="backToLoginBtn">
+        Back
+    </button>
+</form>
+</div>
+</div>
+</div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <div class="logo-icon">📚</div>
+            <div>
+                <h2>Library</h2>
+                <span>Library System</span>
+            </div>
+        </div>
+
+        <nav>
+            <a href="#" class="nav-link active" data-page="dashboard">
+                <span>📊</span> Dashboard
+            </a>
+
+            <a href="#" class="nav-link" data-page="books">
+                <span>📚</span> Books
+            </a>
+
+            <a href="#" class="nav-link" data-page="members">
+                <span>👥</span> Members
+            </a>
+
+            <a href="#" class="nav-link" data-page="borrowings">
+                <span>📖</span> Borrow
+            </a>
+             
+            <a href="#" class="nav-link" data-page="return">
+                <span>🧑‍🏫</span> Return
+            </a>
+
+            <a href="#" class="nav-link" data-page="digital">
+                <span>💻</span> Digital Assets
+            </a>
+
+            <a href="#" class="nav-link" data-page="fines">
+                <span>💰</span> Fines
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>Library Management</p>
+            
+        </div>
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <!-- Header -->
+        <header class="topbar">
+            <button class="menu-btn" id="menuBtn">☰</button>
+
+            <div>
+                <h1 id="pageTitle">Dashboard</h1>
+                <p id="pageSubtitle">Welcome back, Administrator</p>
+            </div>
+
+            
+<div class="user-area">
+    <button class="notification" type="button" title="Notifications">
+        🔔
+    </button>
+
+    <div class="user">
+        <div>
+            <strong id="loggedInUser">Student</strong>
+            <small id="loggedInEmail"></small>
+        </div>
+    </div>
+
+    <button type="button" id="logoutBtn" class="logout-btn">
+        🚪 Log Out
+    </button>
+</div>
+
+        </header>
+
+
+        <!-- Dashboard -->
+        <section class="page active-page" id="dashboard">
+
+            <div class="welcome">
+                <div>
+                    <h2>Library Overview</h2>
+                    <p>Monitor your library activities and resources.</p>
+                </div>
+
+                <button class="primary-btn" onclick="openModal('addBookModal')">
+                    + Add Book
+                </button>
+            </div>
+
+            <!-- Statistics -->
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">📚</div>
+                    <div>
+                        <span>Total Books</span>
+                        <h2 id="totalBooks">0</h2>
+                        
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">👥</div>
+                    <div>
+                        <span>Active Members</span>
+                        <h2>0</h2>
+                        
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">📖</div>
+                    <div>
+                        <span>Books Borrowed</span>
+                        <h2>0</h2>
+                        <small>Currently borrowed</small>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon red">💰</div>
+                    <div>
+                        <span>Outstanding Fines</span>
+                        <h2>₱0</h2>
+                        <small>members</small>
+                    </div>
+                </div>
+                
+
+            </div>
+
+
+            <!-- Dashboard Content -->
+            <div class="content-grid">
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <h3>Recent Borrowings</h3>
+                            <p>Latest library transactions</p>
+                        </div>
+
+                        <button class="text-btn" onclick="showPage('borrowings')">
+                            View All
+                        </button>
+                    </div>
+
+                    <div class="panel">
+    <div class="table-container">
+        <table id="membersTable">
+            <thead>
+                <tr>
+                    <th>Member ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Membership</th>
+                    <th>Joined</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="membersTableBody">
+                <!-- Members will appear here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+                </div>
+
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <h3>Library Status</h3>
+                            <p>Current inventory</p>
+                        </div>
+                    </div>
+
+                    <div class="progress-item">
+                        <div class="progress-label">
+                            <span>Available Books</span>
+                            <strong>0</strong>
+                        </div>
+                        <div class="progress">
+                            <div style="width:0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-item">
+                        <div class="progress-label">
+                            <span>Borrowed Books</span>
+                            <strong>0</strong>
+                        </div>
+                        <div class="progress">
+                            <div style="width:14%"></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-item">
+                        <div class="progress-label">
+                            <span>Reserved Books</span>
+                            <strong>0</strong>
+                        </div>
+                        <div class="progress">
+                            <div style="width:0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <h4>Quick Actions</h4>
+
+                        <button onclick="openModal('addBookModal')">
+                            📚 Add New Book
+                        </button>
+
+                        <button onclick="showPage('members')">
+                            👤 Register Member
+                        </button>
+
+                        <button onclick="showPage('borrowings')">
+                            🔄 Process Borrowing
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Books -->
+        <section class="page" id="books">
+
+            <div class="section-header">
+                <div>
+                    <h2>Books</h2>
+                    <p>Manage physical library books and inventory.</p>
+                </div>
+
+                <button class="primary-btn" onclick="openModal('addBookModal')">
+                    + Add Book
+                </button>
+            </div>
+
+            <div class="toolbar">
+                <input type="text" id="bookSearch"
+                       placeholder="🔍 Search books..."
+                       onkeyup="searchBooks()">
+
+                
+<select id="bookCategoryFilter" onchange="renderBooks()">
+    <option value="">All Categories</option>
+    <option value="Mechanical Engineering">Mechanical Engineering</option>
+    <option value="Civil Engineering">Civil Engineering</option>
+    <option value="Electrical Engineering">Electrical Engineering</option>
+    <option value="Computer Engineering">Computer Engineering</option>
+    <option value="Materials Engineering">Materials Engineering</option>
+    <option value="Manufacturing Engineering">Manufacturing Engineering</option>
+    <option value="Environmental Engineering">Environmental Engineering</option>
+    <option value="Control Engineering">Control Engineering</option>
+    <option value="Engineering Management">Engineering Management</option>
+    <option value="Engineering Ethics">Engineering Ethics</option>
+    <option value="General Engineering">General Engineering</option>
+    <option value="Literature">Literature</option>
+</select>
+
+
+                <select>
+                    <option>All Status</option>
+                    <option>Available</option>
+                    <option>Borrowed</option>
+                </select>
+            </div>
+
+            <div class="panel">
+                <div class="table-container">
+                    <table id="booksTable">
+                        <thead>
+                            <tr>
+                                <th>Book ID</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Category</th>
+                                <th>Copies</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- Members -->
+        <section class="page" id="members">
+
+            <div class="section-header">
+                <div>
+                    <h2>Members</h2>
+                    <p>Manage library members and subscriptions.</p>
+                </div>
+
+                <button class="primary-btn">
+                    + Add Member
+                </button>
+            </div>
+
+            <div class="stats-grid small">
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">👥</div>
+                    <div>
+                        <span>Total Members</span>
+                        <h2>0</h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">✓</div>
+                    <div>
+                        <span>Active</span>
+                        <h2>0</h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">⏳</div>
+                    <div>
+                        <span>Expiring Soon</span>
+                        <h2>0</h2>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel">
+                <div class="table-container">
+                    <table>
+                        <thead>
+    <tr>
+        <th>Member ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Membership</th>
+        <th>Joined</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+</thead>
+
+                        
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- Borrowing -->
+        <section class="page" id="borrowings">
+
+            <div class="section-header">
+                <div>
+                    <h2>Borrowing Records</h2>
+                    <p>Track book loans, returns, and due dates.</p>
+                </div>
+
+                <button class="primary-btn">
+                    + New Borrowing
+                </button>
+            </div>
+
+            <div class="panel">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Member</th>
+                                <th>Book</th>
+                                <th>Borrow Date</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+<!-- Return Books -->
+<section class="page" id="return">
+
+    <div class="section-header">
+        <div>
+            <h2>Return Books</h2>
+            <p>Process borrowed book returns.</p>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div style="padding: 20px;">
+
+            <h3>Find Borrowed Book</h3>
+
+            <form id="returnSearchForm">
+                <div class="form-group">
+                    <label for="returnStudentId">Student ID</label>
+                    <input
+                        type="text"
+                        id="returnStudentId"
+                        placeholder="Enter student ID"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="returnBookId">Book ID</label>
+                    <input
+                        type="text"
+                        id="returnBookId"
+                        placeholder="Enter book ID"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="primary-btn">
+                    Search Borrowing
+                </button>
+            </form>
+
+            <p id="returnMessage" role="status"></p>
+
+            <div id="returnDetails" hidden>
+                <hr>
+
+                <h3>Borrowing Details</h3>
+
+                <p><strong>Student:</strong>
+                    <span id="returnStudentDisplay"></span>
+                </p>
+
+                <p><strong>Book:</strong>
+                    <span id="returnBookDisplay"></span>
+                </p>
+
+                <p><strong>Due Date:</strong>
+                    <span id="returnDueDateDisplay"></span>
+                </p>
+
+                <p><strong>Status:</strong>
+                    <span id="returnStatusDisplay"></span>
+                </p>
+
+                <p><strong>Return Date:</strong>
+                    <span id="returnDateDisplay">Not returned</span>
+                </p>
+
+                <button
+                    type="button"
+                    class="primary-btn"
+                    id="confirmReturnBtn"
+                >
+                    Return Book
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+        
+<!-- Digital Assets -->
+<section class="page" id="digital">
+
+    <div class="section-header">
+        <div>
+            <h2>Digital Assets / E-books</h2>
+            <p>Upload, manage, and download digital books.</p>
+        </div>
+
+        <button type="button" class="primary-btn"
+                onclick="openModal('uploadEbookModal')">
+            + Upload E-book
+        </button>
+    </div>
+
+    <div class="panel" style="padding: 20px;">
+        <input type="search" id="ebookSearch"
+               placeholder="Search by title or author..."
+               style="width:100%; padding:12px; margin-bottom:20px;">
+
+        <p id="ebookMessage" role="status"></p>
+
+        <div class="asset-grid" id="ebookGrid">
+            <!-- Uploaded e-books will appear here -->
+        </div>
+    </div>
+</section>
+
+<!-- Upload E-book Modal -->
+<div class="modal" id="uploadEbookModal">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <div>
+                <h2>Upload E-book (PDF)</h2>
+                <p>Enter the book information and select its PDF file.</p>
+            </div>
+
+            <button type="button" class="close-btn"
+                    onclick="closeModal('uploadEbookModal')">
+                ×
+            </button>
+        </div>
+
+        <form id="uploadEbookForm">
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="ebookTitle">Book Title *</label>
+                    <input type="text" id="ebookTitle"
+                           required maxlength="200">
+                </div>
+
+                <div class="form-group">
+                    <label for="ebookAuthor">Author *</label>
+                    <input type="text" id="ebookAuthor"
+                           required maxlength="150">
+                </div>
+
+                <div class="form-group">
+                    <label for="ebookCategory">Category *</label>
+                    <select id="ebookCategory" required>
+                        <option value="">Select category</option>
+                        <option>Engineering</option>
+                        <option>Programming</option>
+                        <option>Database</option>
+                        <option>Science</option>
+                        <option>Mathematics</option>
+                        <option>Literature</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="ebookPublishDate">Publication Date</label>
+                    <input type="date" id="ebookPublishDate">
+                </div>
+
+                <div class="form-group">
+                    <label for="ebookISBN">ISBN (optional)</label>
+                    <input type="text" id="ebookISBN"
+                           maxlength="30">
+                </div>
+
+                <div class="form-group">
+                    <label for="ebookPublisher">Publisher (optional)</label>
+                    <input type="text" id="ebookPublisher"
+                           maxlength="150">
+                </div>
+
+                <div class="form-group">
+                    <label for="ebookPDF">Select PDF File *</label>
+                    <input type="file" id="ebookPDF"
+                           accept=".pdf,application/pdf"
+                           required>
+                    <small>PDF only; maximum of 50MB.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="ebookDescription">Description</label>
+                    <textarea id="ebookDescription"
+                              rows="3" maxlength="1000"
+                              placeholder="Brief book description"></textarea>
+                </div>
+
+            </div>
+
+            <p id="ebookUploadStatus" role="status"></p>
+
+            <div class="modal-actions">
+                <button type="button" class="secondary-btn"
+                        onclick="closeModal('uploadEbookModal')">
+                    Cancel
+                </button>
+
+                <button type="submit" class="primary-btn">
+                    Upload E-book
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+        <!-- Fines -->
+        <section class="page" id="fines">
+
+            <div class="section-header">
+                <div>
+                    <h2>Fines & Payments</h2>
+                    <p>Monitor overdue fines and payment records.</p>
+                </div>
+
+                <button class="primary-btn">
+                    + Record Payment
+                </button>
+            </div>
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon red">💰</div>
+                    <div>
+                        <span>Total Outstanding</span>
+                        <h2>₱0</h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">✓</div>
+                    <div>
+                        <span>Collected This Month</span>
+                        <h2>₱0</h2>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fine ID</th>
+                                <th>Member</th>
+                                <th>Reason</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Add Book Modal -->
+    <div class="modal" id="addBookModal">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div>
+                    <h2>Add New Book</h2>
+                    <p>Enter book information below.</p>
+                </div>
+
+                <button class="close-btn"
+                        onclick="closeModal('addBookModal')">
+                    ×
+                </button>
+            </div>
+
+            <form id="addBookForm">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Book Title</label>
+                        <input type="text" id="bookTitle"
+                               placeholder="Enter book title"
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Author</label>
+                        <input type="text" id="bookAuthor"
+                               placeholder="Enter author"
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="bookCategory">
+                            <option>Programming</option>
+                            <option>Database</option>
+                            <option>Business</option>
+                            <option>Science</option>
+                            <option>Literature</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Number of Copies</label>
+                        <input type="number" id="bookCopies"
+                               min="1"
+                               value="1"
+                               required>
+                    </div>
+
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button"
+                            class="secondary-btn"
+                            onclick="closeModal('addBookModal')">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                            class="primary-btn">
+                        Add Book
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
